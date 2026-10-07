@@ -124,7 +124,7 @@ for (const [registry, url] of [
   ["crates.io", "https://index.crates.io/gr/oq/groq-minifier"],
 ]) {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { signal: AbortSignal.timeout(10_000) });
     if (response.status === 200)
       failures.push(
         `${registry}: groq-minifier is occupied; stop for a maintainer naming decision`,

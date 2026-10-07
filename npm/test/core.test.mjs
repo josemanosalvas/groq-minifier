@@ -66,6 +66,15 @@ test("multiplication retains meaning and evaluates to six", async () => {
     6,
   );
 });
+test("multiplication is preserved across every trivia separator", async () => {
+  for (const separator of fixtures.separators) {
+    const query = `2 *${separator}*[0].n`;
+    const output = minifyGroq(query);
+    assert.equal(output, "2* *[0].n");
+    assert.deepEqual(parse(output), parse(query));
+    assert.equal(await (await evaluate(parse(output), { dataset })).get(), 6);
+  }
+});
 test("unpaired UTF-16 is rejected before encoding, even in comments", () => {
   for (const query of [
     "\ud800",

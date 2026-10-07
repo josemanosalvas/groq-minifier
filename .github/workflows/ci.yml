@@ -37,6 +37,11 @@ jobs:
           name: npm-package
           path: npm/artifacts/*.tgz
           if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: crate-package
+          path: target/package/*.crate
+          if-no-files-found: error
 
   consumers:
     needs: build
