@@ -1,0 +1,51 @@
+{
+  "name": "groq-minifier",
+  "version": "0.1.0",
+  "description": "Standalone GROQ minifier with precompiled Rust/WASM and no initialization call",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": "^22.0.0 || ^24.0.0 || ^26.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josemanosalvas/groq-minifier.git",
+    "directory": "npm"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/browser.js",
+      "node": "./dist/node.js",
+      "default": "./dist/browser.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES"
+  ],
+  "sideEffects": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/core.test.mjs",
+    "check": "tsc --noEmit && prettier --check src scripts test bench package.json tsconfig.json playwright.config.mjs",
+    "format": "prettier --write src scripts test bench package.json tsconfig.json playwright.config.mjs",
+    "test:pack": "node scripts/consumer.mjs",
+    "test:browser": "node scripts/consumer.mjs --browser",
+    "test:differential": "node test/differential.mjs",
+    "bench": "node bench/run.mjs",
+    "prepack": "npm run build",
+    "release:check": "node scripts/release-check.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "22.20.5",
+    "groq-js": "2.0.0",
+    "prettier": "3.9.9",
+    "typescript": "5.9.3",
+    "vite": "8.3.3"
+  }
+}

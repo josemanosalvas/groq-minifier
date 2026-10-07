@@ -1,0 +1,84 @@
+name: CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+          cache-dependency-path: npm/package-lock.json
+      - run: rustup toolchain install 1.90.0 --profile minimal --component rustfmt --component clippy --target wasm32-unknown-unknown
+      - run: cargo fmt --check
+      - run: cargo clippy --locked --all-targets --all-features -- -D warnings
+      - run: cargo test --locked
+      - run: cargo test --locked --all-features
+      - run: cargo package --locked
+      - run: cargo install wasm-bindgen-cli --version 0.2.105 --locked
+      - run: npm ci
+        working-directory: npm
+      - run: npm run build && npm run check && npm test && npm run test:differential
+        working-directory: npm
+      - run: node -e 'require("node:fs").mkdirSync("artifacts", {recursive:true})'
+        working-directory: npm
+      - run: npm pack --ignore-scripts --pack-destination artifacts
+        working-directory: npm
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: npm-package
+          path: npm/artifacts/*.tgz
+          if-no-files-found: error
+
+  consumers:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: [22, 24, 26]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: ${{ matrix.node }}
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: npm-package
+          path: npm/artifacts
+      - run: npm ci
+        working-directory: npm
+      - run: node scripts/unpack.mjs
+        working-directory: npm
+      - run: npm run test:pack
+        working-directory: npm
+
+  browsers:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: .node-version
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: npm-package
+          path: npm/artifacts
+      - run: npm ci
+        working-directory: npm
+      - run: node scripts/unpack.mjs
+        working-directory: npm
+      - run: npx playwright install --with-deps chromium firefox webkit
+        working-directory: npm
+      - run: npm run test:browser
+        working-directory: npm

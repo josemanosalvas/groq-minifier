@@ -1,0 +1,15 @@
+/target/
+/npm/node_modules/
+/npm/dist/
+/npm/README.md
+/npm/LICENSE
+/npm/THIRD_PARTY_NOTICES
+/npm/artifacts/
+/npm/.consumer/
+/npm/test-results/
+/npm/playwright-report/
+/benchmarks/local*.json
+/benchmarks/native.json
+/benchmarks/javascript.json
+*.tgz
+.DS_Store

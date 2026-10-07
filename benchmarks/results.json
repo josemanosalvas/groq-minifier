@@ -1,0 +1,201 @@
+{
+  "version": "0.1.0",
+  "measuredAt": "2026-10-07T13:42:50.633Z",
+  "environment": {
+    "platform": "linux",
+    "release": "7.2.7-ogc1.1.fc44.x86_64",
+    "arch": "x64",
+    "cpu": "AMD Ryzen 7 5800X3D 8-Core Processor",
+    "logicalCpus": 16,
+    "node": "v22.14.0",
+    "rust": "rustc 1.90.0 (1159e78c4 2025-09-14)",
+    "wasmBindgen": "wasm-bindgen 0.2.105"
+  },
+  "method": "101 batches per case; batch iterations clamp(floor(256 KiB/input bytes), 1, 10000); 1000 warmup calls; nanoseconds per complete allocating call; p95 is sorted batch index 95. 21 fresh-process imports exclude process startup; p95 is sorted index 19. No concurrent workloads requested; host scheduling is uncontrolled.",
+  "sourceHashes": {
+    "src/lib.rs": "b6ec0fc462a6659eaed4aff68bda8c2d16fdbe708010304972e8c8bed96a0ac2",
+    "Cargo.toml": "2fbb40937559a23019c4ebc037fa903a760fd11be8afb845cf2ba06a49570572",
+    "Cargo.lock": "c482307139867433bbb6f353b17f3d1c77a6f815bbd0ab11f70e76ad98b9953a",
+    "rust-toolchain.toml": "ef994db2f5b4d597d6641f1c9d1a39224b2a3cd2476de2723680394e010bf2be",
+    "fixtures/benchmarks.json": "05befe491f951ee01d71ec25ec2233aa601cc5b3ac7ccfb63f6c4f233069e3a1",
+    "benches/scanner.rs": "25830984e45bfd4dbb37a2a636967cb6b1210c7a98a933a3224acf525e9b11e1",
+    "npm/src/checked.js": "4f852f6f2343d59d96dfd94bd544c7029b171479f81b27d9a41ebe8d0afe82de",
+    "npm/src/node.js": "d3d404ba95ab2c478466d1b4b9bd7399d86a3ce9b394fdc0cffbe5185526671e",
+    "npm/src/browser.js": "c1c3c5fd324b667dac42e461ec45d99c5e327b070acc67d34368fe8b5f3ed676",
+    "npm/bench/span-scanner.mjs": "ee3b59ff599169f2e910293ae90a65bd76f3968672bad9a925257f1311705d38",
+    "npm/bench/run.mjs": "d49e3bd6f77a115ef873ee038838881da9ab201fb92eebea0dac2565b67fd2de",
+    "npm/package-lock.json": "f319dc37785c9ea2e6645ed17c3c37cc8b9a77e67057f1771a8e4b40619cf1db"
+  },
+  "artifacts": {
+    "wasmBytes": 36120,
+    "wasmGzipBytes": 17304,
+    "wasmSha256": "1c1ff0f81a97d6d1d4fc8c378353142f846d17ba12a519ec99595bb718f9d7fd",
+    "javascriptBytes": 8807,
+    "npmTarballBytes": 25777,
+    "npmUnpackedBytes": 61984
+  },
+  "implementations": [
+    {
+      "implementation": "native Rust",
+      "initializationNs": 0,
+      "results": [
+        {
+          "inputBytes": 58,
+          "iterations": 4519,
+          "medianNs": 174.87165302057977,
+          "name": "small",
+          "p95Ns": 176.92963044921441,
+          "samples": 101,
+          "throughputMiBs": 316.3068993523666
+        },
+        {
+          "inputBytes": 61442,
+          "iterations": 4,
+          "medianNs": 177858,
+          "name": "large",
+          "p95Ns": 179428,
+          "samples": 101,
+          "throughputMiBs": 329.45190741283955
+        },
+        {
+          "inputBytes": 42,
+          "iterations": 6241,
+          "medianNs": 90.4723601986861,
+          "name": "already compact",
+          "p95Ns": 92.74282967473161,
+          "samples": 101,
+          "throughputMiBs": 442.72439893354516
+        },
+        {
+          "inputBytes": 23098,
+          "iterations": 11,
+          "medianNs": 6766.636363636364,
+          "name": "comment heavy",
+          "p95Ns": 11369.454545454546,
+          "samples": 101,
+          "throughputMiBs": 3255.3795086032696
+        },
+        {
+          "inputBytes": 27138,
+          "iterations": 9,
+          "medianNs": 48764.88888888889,
+          "name": "Unicode heavy",
+          "p95Ns": 50262.666666666664,
+          "samples": 101,
+          "throughputMiBs": 530.7263932786233
+        }
+      ]
+    },
+    {
+      "implementation": "JavaScript/WASM round trip",
+      "initialization": {
+        "samples": 21,
+        "medianNs": 6268305,
+        "p95Ns": 6784381
+      },
+      "results": [
+        {
+          "name": "small",
+          "inputBytes": 58,
+          "iterations": 4519,
+          "samples": 101,
+          "medianNs": 861.5472449657004,
+          "p95Ns": 906.2841336578889,
+          "throughputMiBs": 64.20206282914246
+        },
+        {
+          "name": "large",
+          "inputBytes": 61442,
+          "iterations": 4,
+          "samples": 101,
+          "medianNs": 520951,
+          "p95Ns": 534336.5,
+          "throughputMiBs": 112.4782510229039
+        },
+        {
+          "name": "already compact",
+          "inputBytes": 42,
+          "iterations": 6241,
+          "samples": 101,
+          "medianNs": 547.2804037814453,
+          "p95Ns": 568.2198365646531,
+          "throughputMiBs": 73.18793257040875
+        },
+        {
+          "name": "comment heavy",
+          "inputBytes": 23098,
+          "iterations": 11,
+          "samples": 101,
+          "medianNs": 86278.18181818182,
+          "p95Ns": 90611,
+          "throughputMiBs": 255.31332367170376
+        },
+        {
+          "name": "Unicode heavy",
+          "inputBytes": 27138,
+          "iterations": 9,
+          "samples": 101,
+          "medianNs": 204785.33333333334,
+          "p95Ns": 219321.22222222222,
+          "throughputMiBs": 126.38021081571343
+        }
+      ]
+    },
+    {
+      "implementation": "JavaScript span scanner",
+      "initialization": {
+        "samples": 21,
+        "medianNs": 2587730,
+        "p95Ns": 3072006
+      },
+      "results": [
+        {
+          "name": "small",
+          "inputBytes": 58,
+          "iterations": 4519,
+          "samples": 101,
+          "medianNs": 2823.5866342111085,
+          "p95Ns": 2894.3368001770305,
+          "throughputMiBs": 19.589662906524072
+        },
+        {
+          "name": "large",
+          "inputBytes": 61442,
+          "iterations": 4,
+          "samples": 101,
+          "medianNs": 3339559,
+          "p95Ns": 3426436.75,
+          "throughputMiBs": 17.545926677334585
+        },
+        {
+          "name": "already compact",
+          "inputBytes": 42,
+          "iterations": 6241,
+          "samples": 101,
+          "medianNs": 796.2369812530043,
+          "p95Ns": 821.5766704053838,
+          "throughputMiBs": 50.30452268874867
+        },
+        {
+          "name": "comment heavy",
+          "inputBytes": 23098,
+          "iterations": 11,
+          "samples": 101,
+          "medianNs": 26834.454545454544,
+          "p95Ns": 33354.63636363636,
+          "throughputMiBs": 820.8838127504572
+        },
+        {
+          "name": "Unicode heavy",
+          "inputBytes": 27138,
+          "iterations": 9,
+          "samples": 101,
+          "medianNs": 749546.6666666666,
+          "p95Ns": 758822.5555555555,
+          "throughputMiBs": 34.5286220986456
+        }
+      ]
+    }
+  ],
+  "consumed": 0
+}
