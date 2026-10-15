@@ -1,17 +1,25 @@
 # groq-minifier
 
+> **Superseded by groq-compiler.** The minifier now lives in the unpublished sibling
+> repository groq-compiler. It preserves this package's output, `SyntaxError` and
+> `TypeError` messages, and fixtures. It adds a GROQ parser, tidy and share passes
+> verified with groq-js, GET-budget checks, per-block-type query splitting, and a
+> TypeGen type deduplicator. groq-minifier will not be published. Its Rust crate
+> remains here as the reference implementation for groq-compiler's differential
+> tests in `examples/fixture_runner.rs`.
+
 An independent, spelling-preserving GROQ whitespace and comment minifier.
 The Rust core uses only the standard library by default. The ESM npm package
 contains precompiled WASM and TypeScript declarations. It needs no Rust
 installation, Sanity credentials, dataset, or initialization call.
 
-Both packages are versioned **0.1.0**. Registry publication is maintainer
-controlled and gated by [release checks](docs/releasing.md). Until publication,
-install a source-generated npm tarball or use the Rust checkout directly.
+Both packages are versioned **0.1.0**. Build and install an npm tarball from
+source or use the Rust checkout directly. The [original release
+checks](docs/releasing.md) are retained for reference.
 
 ## Installation and examples
 
-Once published:
+These installation commands would apply only if the package were published:
 
 ```sh
 cargo add groq-minifier@0.1.0
@@ -60,8 +68,8 @@ Supported Node majors are 22, 24, and 26.
   Non-string arguments and unpaired JavaScript UTF-16 surrogates throw
   `TypeError` before WASM encoding, including surrogates inside comments.
   A `TypeError` surrogate position uses UTF-16 code units and says so.
-- This is a scanner, not a query parser. It validates string spelling;
-  structural and application-level query validation is the caller's job.
+- The scanner validates string spelling without parsing the query. Callers must
+  validate query structure and application requirements.
 
 ```js
 try {
@@ -128,15 +136,17 @@ CLI. Generated `dist/` files are excluded from git; `npm pack` builds and
 includes them. The packed package has no runtime npm dependencies or install
 scripts. The Rust WASM binding is enabled only with `--features wasm`.
 
-CI checks formatting, Clippy, default/all-feature Rust tests, WASM builds,
-JavaScript and types, and native/WASM/JavaScript equivalence. Packed consumers
-run on Linux, macOS, and Windows with Node 22, 24, and 26. Browser imports and
-a Vite production bundle run in Chromium, Firefox, and WebKit.
+CI checks formatting, Clippy, WASM builds, JavaScript, and types. It runs Rust
+tests with both default and all features and checks that native Rust, WASM, and
+JavaScript produce equivalent results. Tests install the packed package on
+Linux, macOS, and Windows with Node 22, 24, and 26. Browser tests check direct
+imports and a Vite production bundle in Chromium, Firefox, and WebKit.
 
-`groq-js@2.0.0` checks original/minified ASTs and evaluated results for supported
-syntax. Unsupported specification cases have direct fixtures with explicit
-reasons, including EOF comments and braced astral escapes. Tests never catch
-parser failures and silently skip them. See [research notes](docs/research.md).
+Tests use `groq-js@2.0.0` to compare the ASTs and evaluated results of original
+and minified queries for supported syntax. Unsupported specification cases,
+including EOF comments and braced astral escapes, have direct fixtures that
+explain the limitations. Tests do not silently skip parser failures. See
+[research notes](docs/research.md).
 Rust property tests cover bounded arbitrary UTF-8, generated valid literals,
 unchanged string spelling, byte offsets, non-growing output, and idempotence.
 
@@ -147,7 +157,7 @@ caching, product CLI support, and native Node bindings are separate work.
 ## Benchmarks and prior art
 
 See [benchmark evidence and reproducible commands](benchmarks/README.md) for
-native Rust, complete JavaScript→WASM→JavaScript calls, and an independent
+native Rust, complete JavaScript calls through WASM, and an independent
 JavaScript span scanner. Small, large, compact, comment-heavy, and Unicode-heavy
 cases report median, p95, throughput, cold initialization, and artifact size.
 Measurements are machine-specific; there is no fixed speedup gate or general
