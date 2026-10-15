@@ -1,28 +1,35 @@
 # First release: 0.1.0
 
+> **Historical release procedure.** groq-minifier was superseded by groq-compiler
+> and will not be published. This procedure is retained for reference if
+> publication is reconsidered.
+
 The public repository is [josemanosalvas/groq-minifier](https://github.com/josemanosalvas/groq-minifier).
 Both package versions are 0.1.0 and use the same Git tag, `v0.1.0`. MIT project
 licensing and generated-artifact notices must ship with the npm artifact.
 
-The first npm/crates.io publication is performed by the maintainer, with their
+The maintainer publishes the first release to npm and crates.io using their
 registry credentials and two-factor authentication where required. CI builds
-and tests artifacts; it has no publication tokens and never publishes on push.
+and tests artifacts. It has no publication tokens and never publishes on push.
 
 ## Gates
 
-1. The full CI matrix is green for the exact release commit: Rust formatting,
-   Clippy, default/all-feature tests, WASM build, JavaScript/types, differential
-   tests, clean packed Node consumers on all three operating systems and Node
-   22/24/26, and Chromium/Firefox/WebKit raw imports and Vite production bundles.
+1. The full CI matrix passes for the exact release commit. It checks Rust
+   formatting, Clippy, tests with default and all features, the WASM build,
+   JavaScript, types, and differential tests. It tests clean installs of the
+   packed package on Linux, macOS, and Windows with Node 22, 24, and 26. It also
+   tests direct imports and Vite production bundles in Chromium, Firefox, and
+   WebKit.
 2. The benchmark report covers native Rust, complete WASM round trips, and the
    independent JavaScript span scanner for all five categories, including
-   median/p95, throughput, import initialization, and artifact size. Source
-   hashes must match. There is no fixed speedup requirement.
+   median and p95 timings, throughput, import initialization, and artifact size.
+   Source hashes must match. There is no fixed speedup requirement.
 3. The existing application's private query corpus has been validated locally.
    Commit only the aggregate attestation produced by the
    [corpus helper](corpus.md); never application queries or source code.
-4. `cargo package --locked` and the packed npm artifact have been reviewed.
-   Build tools/dependencies and lockfiles are pinned/committed.
+4. The maintainer has reviewed the output of `cargo package --locked` and the
+   packed npm artifact. Build tools and dependencies are pinned, and lockfiles
+   are committed.
 5. Immediately before publication, recheck both names. `npm run release:check`
    queries the npm registry and crates.io index; only HTTP 404 means available.
    If either name is occupied or availability is uncertain, stop. An occupied
@@ -60,7 +67,7 @@ and version, verify ownership, and complete the remaining upload. Do not rerun
 the initial unused-name gate as if an already published package were a naming
 collision. Future releases need a separate ownership-aware process.
 
-The macOS checkout requested for later can be created independently:
+To create a separate checkout on macOS:
 
 ```sh
 git clone https://github.com/josemanosalvas/groq-minifier.git /Users/manosalvashj/Developer/groq-minifier
